@@ -28,10 +28,15 @@ export function CalendarExpenseTable({
   const [deletingExpense, setDeletingExpense] = useState<Expense | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const totalPages = Math.ceil(expenses.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentExpenses = expenses.slice(startIndex, endIndex);
+  // Sort expenses by date (descending - newest first)
+const sortedExpenses = [...expenses].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+);
+
+const totalPages = Math.ceil(sortedExpenses.length / ITEMS_PER_PAGE);
+const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+const endIndex = startIndex + ITEMS_PER_PAGE;
+const currentExpenses = sortedExpenses.slice(startIndex, endIndex);
 
   const handleEdit = (expense: Expense) => {
     setEditingExpense(expense);
